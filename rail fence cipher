@@ -1,0 +1,25 @@
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+char p[50],c[50];
+int length,d,i,j,k;
+printf("Enter plain text: ");
+scanf("%s",p);
+printf("Enter depth: ");
+scanf("%d",&d);
+//printf("The plain text is : %s\nDepth is :%d\n",p,d);
+length=strlen(p);
+k=0;
+for(j=0;j<d;j++)
+ {
+  for(i=0;i<length;i++)
+  {
+   if(i%d==j)
+	c[k++]=p[i];
+  }
+ }
+printf("\nCipher text is: ")
+for(i=0;i<length;i++)
+ printf("%c",c[i]);
+}
