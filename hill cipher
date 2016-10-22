@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+	int temp,i,j,key[2][2],adj[2][2],det,inv;
+	int lookup[]={1,9,21,15,3,19,0,7,23,11,5};
+	char ip[100],op[100],des[100];
+	printf("Enter key: ");
+		for(i=0;i<2;i++)
+			for(j=0;j<2;j++)
+			{
+				scanf("%d",&key[i][j]);
+				adj[i][j]=key[i][j];
+			}
+	printf("Enter input: ");
+		scanf("%s",ip);
+	if(strlen(ip)%2==1)
+	{
+		ip[strlen(ip)]='X';
+		ip[strlen(ip)+1]='\0';
+	}
+	temp=strlen(ip)/2;
+	printf("Cipher text: ");
+	for(i=0;i<strlen(ip);i+=2)
+	{
+		op[i]=(key[0][0]*(ip[i]-'A')+key[0][1]*(ip[i+1]-'A'))%26+'A';
+		op[i+1]=(key[1][0]*(ip[i]-'A')+key[1][1]*(ip[i+1]-'A'))%26+'A';
+	}
+	op[i]=0;
+	printf("%s\n",op);
+	temp=key[0][0];
+	adj[0][0]=adj[1][1];
+	adj[1][1]=temp;
+	adj[0][1]=-adj[0][1];
+	adj[1][0]=-adj[1][0];
+	det=key[0][0]*key[1][1]-key[0][1]*key[1][0];
+	if(det<0)
+		det=det+26;
+	inv=lookup[(det-1)/2];
+	for(i=0;i<2;i++)
+		for(j=0;j<2;j++)
+		{
+			if(abs(adj[i][j])>26)
+				adj[i][j]%=26;
+			adj[i][j]*=inv;
+		}
+	for(i=0;i<strlen(op);i+=2)
+	{
+		des[i]=(adj[0][0]*(op[i]-'A')+adj[0][1]*(op[i+1]-'A'))%26;
+		des[i]=des[i]<0?des[i]+26+'A':des[i]+'A';
+		des[i+1]=(adj[1][0]*(op[i]-'A')+adj[1][1]*(op[i+1]-'A'))%26;
+		des[i+1]=des[i+1]<0?des[i+1]+26+'A':des[i+1]+'A';
+	}
+	des[i]='\0';
+	printf("Deciphered text: %s",des);
+}
