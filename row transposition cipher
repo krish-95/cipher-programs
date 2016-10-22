@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+char key[7];
+char p[50];
+int i,j,k,d,length,lp,lk,x;
+char m[10][10];
+printf("Enter plain text: ");
+scanf("%s",p);
+printf("Enter key value: (1-7):");
+scanf("%s",key);
+lp=strlen(p);
+lk=strlen(key);
+d=lp/lk;
+//printf("Matrix is: \n");
+for(i=0,x=0;i<=d;i++)
+ {
+ for(j=0;j<lk;j++,x++)
+  {
+   m[i][j]='X';
+  if(x<lp)
+   { m[i][j]=p[x]; }
+ // printf("%c",m[i][j]);
+  }
+// printf("\n");
+ }
+printf("Cipher is: \n");
+for(i=1;i<=7;i++)
+{
+     for(j=0;j<lk;j++)
+     {
+       if((key[j]-48)==i)
+ 	{
+	 for(k=0;k<d+1;k++)
+	   printf(" %c ",m[k][j]);
+	 break; 
+        }
+     }
+}
+}
