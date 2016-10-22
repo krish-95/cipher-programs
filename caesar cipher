@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<string.h>
+char alpha[26]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+void main()
+{
+char plain[30],cipher[30];
+int i,j,k,key,count=0;
+
+printf("Enter plain text : ");
+scanf("%s",plain);
+printf("Enter key: ");
+scanf("%d",&key);
+
+for(k=0;k<strlen(plain);k++)
+{
+ for(i=0;i<26;i++)
+ {
+  if(plain[k]==alpha[i])
+  {
+   j=i;
+   break;
+  }
+ }
+ if(i==26)
+  printf("Enter valid text...");
+ cipher[k]=alpha[((j+key)%26)];
+}
+cipher[k]='\0';
+printf("Caesar text is : ");
+ printf("%s",cipher); 
+}
