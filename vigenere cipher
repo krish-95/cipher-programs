@@ -1,0 +1,33 @@
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+char p[30],k[30],key[30],c[30];
+int i,j,length;
+printf("Enter plain text: ");
+scanf("%s",p);
+printf("Enter key value: ");
+scanf("%s",k);
+length=strlen(p);
+j=0;
+for(i=0;i<length;i++)
+{
+key[i]=k[j++];
+if(j==strlen(k)) 
+  j=0;
+}
+key[i]='\0';
+printf("Plain text : %s of length %d",p,length);
+printf("\nKey : %s of length %d",key,strlen(key));
+printf("\n---------------------------------------------------------------------\n");
+length=strlen(p);
+for(i=0;i<length;i++)
+{
+c[i]=((p[i]-'A')+(key[i]-'A'))%26 +'A'; 
+}
+
+c[length]='\0';
+printf("\nCipher text is : ");
+for(i=0;i<strlen(c);i++)
+ printf("%c",c[i]);
+}
