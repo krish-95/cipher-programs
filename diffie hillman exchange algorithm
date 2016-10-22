@@ -1,0 +1,27 @@
+#include<stdio.h>
+int power(int a, int b)
+{
+	int i,res = 1;
+	for(i=0;i<b;i++)
+		res *= a;
+	return res;
+}
+void main()
+{
+	int p=7, g=3;
+	int a,b,A,B,Sa,Sb;
+
+	printf("Enter a : ");
+		scanf("%d",&a);
+	printf("Enter b : ");
+		scanf("%d",&b);
+	A = power(g,a)%p;
+	B = power(g,b)%p;
+	Sa = power(B,a)%p;
+	Sb = power(A,b)%p;
+
+	if(Sa == Sb)
+		printf("\nExchange successful");
+	else
+		printf("\nunsuccess");	
+}
