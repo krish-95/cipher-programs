@@ -1,0 +1,183 @@
+#include<stdio.h>
+
+char ip[9],xor[9],bin[3],op[9],swap[9],inv[9];
+int sub0[4][4]={{1,0,3,2},{3,2,1,0},{0,2,1,3},{3,1,3,2}};
+int sub1[4][4]={{0,1,2,3},{2,0,1,3},{3,0,1,0},{2,1,0,3}};
+
+char* ini_per(char* inp)
+{
+	ip[0]=inp[1];
+	ip[1]=inp[5];
+	ip[2]=inp[2];
+	ip[3]=inp[0];
+	ip[4]=inp[3];
+	ip[5]=inp[7];
+	ip[6]=inp[4];
+	ip[7]=inp[6];
+	ip[8]=0;
+	return ip;
+}
+
+void xor_fn(char* a,char* b,int n)
+{
+	int i;
+	for(i=0;i<n;i++)
+	{
+		if((a[i]=='0'&&b[i]=='0')||(a[i]=='1'&&b[i]=='1'))
+			xor[i] = '0';
+		else
+			xor[i] = '1';
+	}
+	xor[i]=0;
+}
+
+char* to_bin(int n)
+{
+	int i;
+	for(i=0;i<2;i++)
+		bin[i]='0';
+	i=1;	
+	while(n)
+	{
+		bin[i--]=(n%2)+'0';
+		n=n/2;
+	}
+	bin[2]=0;
+	return bin;
+}
+
+char* per_inv(char* s)
+{
+	inv[0]=s[3];
+	inv[1]=s[0];
+	inv[2]=s[2];
+	inv[3]=s[4];
+	inv[4]=s[6];
+	inv[5]=s[1];
+	inv[6]=s[7];
+	inv[7]=s[5];
+	inv[8]=0;
+	return inv;
+}
+
+char* sdes(char* inp,char* key1)
+{
+	int i,j,r0,c0,r1,c1,v0,v1;
+	char *b0,*b1;
+	char l[5],r[5],ep[9],s0[5],s1[5],p4[5],b[5];
+	for(i=0;i<4;i++)
+		l[i]=inp[i];
+	l[i]=0;
+	for(j=0;i<8;i++,j++)
+		r[j]=inp[i];
+	r[j]=0;
+
+
+	//expansion
+	ep[0]=r[3];
+	ep[1]=r[0];
+	ep[2]=r[1];
+	ep[3]=r[2];
+	ep[4]=r[1];
+	ep[5]=r[2];
+	ep[6]=r[3];
+	ep[7]=r[0];
+	ep[8]=0;
+
+	//xor ep with k1
+	xor_fn(ep,key1,8);
+
+	//s0 and s1
+	for(i=0;i<4;i++)
+		s0[i]=xor[i];
+	s0[i]=0;
+	for(j=0;i<8;i++,j++)
+		s1[j]=xor[i];
+	s1[j]=0;
+
+	//b0 and b1
+	r0 = ((s0[0]-'0')*2)+(s0[3]-'0');
+	c0 = ((s0[1]-'0')*2)+(s0[2]-'0');
+	v0 = sub0[r0][c0];
+	b0 = to_bin(v0);
+
+	for(i=0;i<2;i++)
+		b[i]=*b0++;
+	r1 = ((s1[0]-'0')*2)+(s1[3]-'0');
+	c1 = ((s1[1]-'0')*2)+(s1[2]-'0');
+	v1 = sub1[r1][c1];
+	b1 = to_bin(v1);
+	for(;i<4;i++)
+		b[i]=*b1++;
+	b[i]=0;
+
+	//p4
+	p4[0]=b[1];
+	p4[1]=b[3];
+	p4[2]=b[2];
+	p4[3]=b[0];
+	p4[4]=0;
+
+	//xor l with p4
+	xor_fn(l,p4,4);
+	
+	//output
+	for(i=0;i<4;i++)
+		op[i]=xor[i];
+	for(j=0;i<8;i++,j++)
+		op[i]=r[j];
+	op[i]=0;
+	return op;
+}
+
+void main()
+{
+	char input[9],k1[9],k2[9];
+	char *ini,*out,*c;
+	int i,j;
+	printf("enter input: ");
+		scanf("%s",input);
+	printf("enter key1: ");
+		scanf("%s",k1);
+	printf("enter key2: ");
+		scanf("%s",k2);
+
+	//encryption
+	//initial permutation
+	ini = ini_per(input);
+
+	out = sdes(ini,k1);
+
+	//swap
+	for(i=4,j=0;i<8;i++,j++)
+		swap[i]=out[j];
+	for(i=0,j=4;i<4;i++,j++)
+		swap[i]=out[j];
+	swap[8]=0;
+
+	out = sdes(swap,k2);
+
+	//ip inverse
+	c=per_inv(out);
+	printf("\ncipher text: %s",c);
+
+	//decryption
+	//initial permutation
+	ini = ini_per(c);
+
+	out = sdes(ini,k2);
+
+	//swap
+	for(i=4,j=0;i<8;i++,j++)
+		swap[i]=out[j];
+	for(i=0,j=4;i<4;i++,j++)
+		swap[i]=out[j];
+	swap[8]=0;
+
+	out = sdes(swap,k1);
+
+
+	//ip inverse
+	c=per_inv(out);
+	printf("\ndecipher text: %s",c);
+}
